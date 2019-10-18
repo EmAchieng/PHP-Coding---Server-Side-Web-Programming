@@ -3,8 +3,8 @@
 <head> 
 <meta charset="utf-8">
 <title>PHP 프로그래밍 입문</title>
-<link rel="stylesheet" type="text/css" href="./css/common.css">
-<link rel="stylesheet" type="text/css" href="./css/member.css">
+<link rel="stylesheet" type="text/css" href="./css/common.css?var<?=rand()?>">
+<link rel="stylesheet" type="text/css" href="./css/member.css?var<?=rand()?>">
 <script type="./js/jquery-1.10.2.js"></script>
 <script>
 	function check_id_ajax(){
