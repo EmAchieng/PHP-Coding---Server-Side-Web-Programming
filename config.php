@@ -1,5 +1,6 @@
 <?php
-	$sys['name'] = "서버 프로그래밍";
-	$sys['domain'] = "http://test.com";
+	$sys['var'] = "1.1.1"; 
+	$sys['name'] = "php programming";
+	$sys['domain'] = "localhost";
 	
 ?>

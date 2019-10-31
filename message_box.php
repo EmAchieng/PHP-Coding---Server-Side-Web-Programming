@@ -1,6 +1,8 @@
 <?php 
 	include_once './db/db_con.php';
 	
+	include_once './utill/default_fun.php';
+	
 	if (isset($_GET["page"]))
 		$page = $_GET["page"];
 	else 
@@ -74,13 +76,14 @@
 	if ($total_record % $scale == 0)     
 		$total_page = floor($total_record/$scale);      
 	else
-		$total_page = floor($total_record/$scale) + 1; 
+		$total_page = floor($total_record/$scale) + 1; // 나머지가 잇는 때는 + 1
  
 	// 표시할 페이지($page)에 따라 $start 계산  
-	$start = ($page - 1) * $scale;      
+	$start = ($page - 1) * $scale; //if page=1 >> $start = 0     
 
-	$number = $total_record - $start;
+	$number = $total_record - $start; // 15 -0 = 15 // 화면에 표시할 레코드
 
+	//($i=0)  $ i<10   i++
    for ($i=$start; $i<$start+$scale && $i < $total_record; $i++)
    {
       mysqli_data_seek($result, $i);
@@ -136,12 +139,17 @@
    	}
    	if ($total_page>=2 && $page != $total_page)		
    	{
-		$new_page = $page+1;	
+		$new_page = $page+1;	//next page
 		echo "<li> <a href='message_box.php?mode=$mode&page=$new_page'>다음 ▶</a> </li>";
 	}
 	else 
 		echo "<li>&nbsp;</li>";
 ?>
+		<?php 
+		
+			echo getPanging($page, $scale)
+		
+		?>
 			</ul> <!-- page -->	    	
 			<ul class="buttons">
 				<li><button onclick="location.href='message_box.php?mode=rv'">수신 쪽지함</button></li>
