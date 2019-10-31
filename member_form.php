@@ -98,7 +98,7 @@
 </head>
 <body> 
 	<header>
-    	<?php include "header.php";?>
+    	<?php include_once "header.php";?>
     </header>
 	<section>
 		<div id="main_img_bar">

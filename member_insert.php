@@ -1,5 +1,6 @@
 
 <?php include_once ".db/db_con.php";
+	include_once './config.php';
     $id   = $_POST["id"];
     $pass = $_POST["pass"];
     $name = $_POST["name"];

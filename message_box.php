@@ -1,3 +1,15 @@
+<?php 
+	include_once './db/db_con.php';
+	
+	if (isset($_GET["page"]))
+		$page = $_GET["page"];
+	else 
+		$page = 1;
+	
+	$mode = !empty($_GET["mode"]) ? $mode = $_GET["mode"] : $mode= "";
+	$scale = 10; 
+
+?>
 <!DOCTYPE html>
 <html>
 <head> 

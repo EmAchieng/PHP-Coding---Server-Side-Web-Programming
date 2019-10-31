@@ -1,4 +1,7 @@
-        <?php include_once "config.php";?>
+        <?php include_once "config.php";
+        
+        ?>
+        
         <div id="footer_content">
             <p id="footer_logo">PHP 프로그래밍 입문 | <span>한빛 아카데미</span></p>
             <ul id="download">
