@@ -1,11 +1,14 @@
 <meta charset="utf-8">
 <?php
+	include_once './db/db_con.php';
+	include_once './config.php';
+/*
     session_start();
     if (isset($_SESSION["userid"])) $userid = $_SESSION["userid"];
     else $userid = "";
     if (isset($_SESSION["username"])) $username = $_SESSION["username"];
     else $username = "";
-
+*/
     if ( !$userid )
     {
         echo("
@@ -27,15 +30,32 @@
 
 	$upload_dir = './data/';
 
-	$upfile_name	 = $_FILES["upfile"]["name"];
-	$upfile_tmp_name = $_FILES["upfile"]["tmp_name"];
-	$upfile_type     = $_FILES["upfile"]["type"];
-	$upfile_size     = $_FILES["upfile"]["size"];
-	$upfile_error    = $_FILES["upfile"]["error"];
-
+	$upfile_name	 = $_FILES["upfile"]["name"][0];
+	$upfile_tmp_name = $_FILES["upfile"]["tmp_name"][0];
+	$upfile_type     = $_FILES["upfile"]["type"][0];
+	$upfile_size     = $_FILES["upfile"]["size"][0];
+	$upfile_error    = $_FILES["upfile"]["error"][0];
+	
+	/*echo $upfile_tmp_name();
+	
+	exit;
+     */
+	
 	if ($upfile_name && !$upfile_error)
 	{
 		$file = explode(".", $upfile_name);
+		
+		for($ii=0; $ii < count($file); $ii++) {
+			if([$ii] == count ($file) - 1) {
+				$file_ext = $file[$ii];
+			}
+			else {
+				if([$ii] == count($file) - 2)
+					$file_name = $file[$ii];
+				else
+					$file_name = $file[$ii].".";
+			}
+		}
 		$file_name = $file[0];
 		$file_ext  = $file[1];
 
@@ -44,7 +64,7 @@
 		$copied_file_name = $new_file_name.".".$file_ext;      
 		$uploaded_file = $upload_dir.$copied_file_name;
 
-		if( $upfile_size  > 1000000 ) {
+		if( $upfile_size  > 10000000000 ) {
 				echo("
 				<script>
 				alert('업로드 파일 크기가 지정된 용량(1MB)을 초과합니다!<br>파일 크기를 체크해주세요! ');
