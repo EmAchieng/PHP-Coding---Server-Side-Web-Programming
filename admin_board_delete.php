@@ -24,7 +24,7 @@
                     </script>
         ");
 
-    $con = mysqli_connect("localhost", "user1", "12345", "sample");
+    $con = mysqli_connect("localhost", "user1", "1234", "sample");
 
     for($i=0; $i<count($_POST["item"]); $i++){
         $num = $_POST["item"][$i];
@@ -38,7 +38,8 @@
         if ($copied_name)
         {
             $file_path = "./data/".$copied_name;
-            unlink($file_path);
+            //if no error 구냥 넘어가라
+            @unlink($file_path);
         }
 
         $sql = "delete from board where num = $num";

@@ -39,8 +39,8 @@
 	$num  = $_GET["num"];
 	$page = $_GET["page"];
 	
-	$con = mysqli_connect("localhost", "user1", "12345", "sample");
-	$sql = "select * from board where num=$num";
+	$con = mysqli_connect("localhost", "user1", "1234", "sample");
+	$sql = "select * from board where num='$num'";
 	$result = mysqli_query($con, $sql);
 	$row = mysqli_fetch_array($result);
 	$name       = $row["name"];
