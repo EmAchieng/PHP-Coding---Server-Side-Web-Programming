@@ -12,7 +12,7 @@
     	<?php include "header.php";?>
     </header>
 <?php    
-   	$con = mysqli_connect("localhost", "user1", "12345", "sample");
+   	$con = mysqli_connect("localhost", "user1", "1234", "sample");
     $sql    = "select * from members where id='$userid'";
     $result = mysqli_query($con, $sql);
     $row    = mysqli_fetch_array($result);

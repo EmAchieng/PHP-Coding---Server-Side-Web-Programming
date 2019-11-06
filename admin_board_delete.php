@@ -38,7 +38,6 @@
         if ($copied_name)
         {
             $file_path = "./data/".$copied_name;
-            //if no error 구냥 넘어가라
             @unlink($file_path);
         }
 

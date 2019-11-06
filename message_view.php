@@ -1,3 +1,19 @@
+<?php 
+	$mode = isset($_GET["mode"]) ? $mode=$_GET["mode"] : $mode = "rv";
+	$num  = isset($_GET["num"]) ? $num = $_GET["num"] : $num = "";
+	
+	if(!$num) {
+		echo("
+				<script>
+				alert('정상적 경로로 접근하세요.');
+				history.go(-1)
+				</script>
+				");
+		exit;
+	}
+	include_once "./db/db_con.php";
+	include_once './config.php';
+?>
 <!DOCTYPE html>
 <html>
 <head> 
@@ -17,46 +33,31 @@
    	<div id="message_box">
 	    <h3 class="title">
 <?php
-	$mode = isset($_GET["mode"]) ? $mode="send" : $mode ="rv";
-	$num  = isset($_GET["num"]) ? $num= $_GET["num"] : $num ="";
-	
-	if(!$send_id != $userid) {
-		echo("
-			<script>
-			alert('로그인 후 이용해 주세요! ');
-			history.go(-1)
-			</script>
-			");
-		exit;
-	}
-
-	$con = mysqli_connect("localhost", "user1", "1234", "sample");
 	$sql = "
-        	select AA.*, BB.id.name as rv_name
-        	from
-        	
-        		(
-	        	select 
-					A.*, B.name as send_name
-				from 
-							
-					message A
-				left join
-					memberS B
-				on
-					A.send_id  = B.id
-					) AA
+			select
+				AA.*, BB.name as rv_name
+			from
+				(
+					select 
+						A.*, B.name as send_name 
+					from 
+						message A
+					left join
+						members B
+					on 
+						A.send_id = B.id
+				) AA
 			left join
-				member BB
+				members BB
 			on 
 				AA.rv_id = BB.id
+					
 			where 
 				AA.num='$num'
 	";
+	
 	$result = mysqli_query($con, $sql);
-	
-	
-	#field names
+
 	$row = mysqli_fetch_array($result);
 	$send_id    = $row["send_id"];
 	$rv_id      = $row["rv_id"];
@@ -64,22 +65,20 @@
 	$subject    = $row["subject"];
 	$content    = $row["content"];
 
-	/*html 화면에서 보입니다*/
 	$content = str_replace(" ", "&nbsp;", $content);
 	$content = str_replace("\n", "<br>", $content);
-/*
- * logic이 없음
+/* 
 	if ($mode=="send")
 		$result2 = mysqli_query($con, "select name from members where id='$rv_id'");
 	else
 		$result2 = mysqli_query($con, "select name from members where id='$send_id'");
 
 	$record = mysqli_fetch_array($result2);
-	*/
-	$mode =="send" ? $msg_name= $row["rv_name"] : $msg_name = $row["send_name"];
-	
 	$msg_name = $record["name"];
+ */
 
+	$mode=="send" ? $msg_name = $row["rv_name"] : $msg_name = $row["send_name"]; 
+		
 	if ($mode=="send")	    	
 	    echo "송신 쪽지함 > 내용보기";
 	else
@@ -96,7 +95,6 @@
 			</li>		
 	    </ul>
 	    <ul class="buttons">
-	    
 				<li><button onclick="location.href='message_box.php?mode=rv'">수신 쪽지함</button></li>
 				<li><button onclick="location.href='message_box.php?mode=send'">송신 쪽지함</button></li>
 				<li><button onclick="location.href='message_response_form.php?num=<?=$num?>'">답변 쪽지</button></li>

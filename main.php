@@ -1,4 +1,8 @@
-        <div id="main_img_bar">
+<?php 
+	include_once './config.php';
+?>
+
+		<div id="main_img_bar">
             <img src="./img/main_img.png">
         </div>
         <div id="main_content">

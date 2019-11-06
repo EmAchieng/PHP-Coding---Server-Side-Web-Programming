@@ -1,40 +1,77 @@
+<?php 
+	include_once './config.php';
+?>
 <!DOCTYPE html>
 <html>
 <head> 
 <meta charset="utf-8">
-<title>PHP 프로그래밍 입문</title>
-<link rel="stylesheet" type="text/css" href="./css/common.css?var<?=$sys['var']?>">
-<link rel="stylesheet" type="text/css" href="./css/member.css?var<?=$sys['var']?>">
-<script type="./js/jquery-1.10.2.js"></script>
+<title>PHP 프로그래밍 입문-<?=$sys['name']?></title>
+<link rel="stylesheet" type="text/css" href="./css/common.css?var=<?=$sys['var']?>">
+<link rel="stylesheet" type="text/css" href="./css/member.css?var=<?=$sys['var']?>">
+<script src="./js/jquery-1.10.2.js?var=<?=$sys['var']?>"></script>	
 <script>
-	function check_id_ajax(){
+	$(function(){
+		$("#id").blur(function(){
+			if($(this).val() == ""){
+				$("#id_check_msg").html("아이디를 입력 해주세요.").css("color","red").attr("data-check","0");
+			}else{
+				checkIdAjax();
+			}	
+		}); // input id='id' 애에 포커스가 잃어 버릴때 발생하는 이벤트
+	}); //문서가 로드되면
+
+	function checkIdAjax(){
+		// id 값을 post로 전송해서 서버와 통신하여 중복 결과 json 형태로 받아오는 함수
 		$.ajax({
-			url : "./ajax/id_check.php ",
-			dataType : "json",
+			url : "./ajax/check_id.php",
 			type : "post",
+			dataType : "json",
 			data : {
-				"id" :  $("#id").val()
-				 },
-			success : function(data) {
-				if(data.check){
-					$("id_check_msg").html("사용 가능 아이디").css(color, "" ).attr("data-check" , "1");
-					
-					
-				}else {
-					$("id_check_msg").html("중복 아이디").css(color, "red").attr("data-check", "0");
-				}
+				"id" : $("#id").val()
 			},
-	});
+			success : function(data){
+				// {"check":false,"id":"kkk","name":"\ud64d\uae38\ub3d9","hacjum":{"com":"A","server":"A+","db":"C"}}
+				// alert(data.hacjum[0].com);
+				// alert(data.hacjum[1].com);
+				
+				if(data.check){
+					$("#id_check_msg").html("사용 가능한 아이디 입니다.").css("color","blue").attr("data-check","1");
+				}else{
+					$("#id_check_msg").html("중복된 아이디 입니다.").css("color","red").attr("data-check","0");
+				}
+			}
+		});
 	}
+/* 
+    <div class="col2">
+		<input type="text" name="id" id="id" style="width: 150px;">
+		&nbsp;
+		<span id="id_check_msg" data-check="0"></span>
+	</div> 	
+	
+ */
+	
+	$(function(){
+		$("#save_frm").click(function(){
+			check_input();
+		});
+	});
 
 
+   function check_input(){
 
-   function check_input()
-   {
-      if (!document.member_form.id.value) {
+	  // document.member_form.id.value == $("#id").val() 
+      if (!$("#id").val()) {
           alert("아이디를 입력하세요!");    
-          document.member_form.id.focus();
+          //document.member_form.id.focus();
+          $("#id").focus();
           return;
+      }
+
+      if($("#id_check_msg").attr("data-check") == "0"){
+          alert("아이디 중복 다시 하십시요.");    
+          $("#id").focus();
+          return;		
       }
 
       if (!document.member_form.pass.value) {
@@ -74,8 +111,8 @@
           document.member_form.pass.select();
           return;
       }
-
-      document.member_form.submit();
+		$("#member_form").submit();
+      //document.member_form.submit();
    }
 
    function reset_form() {
@@ -98,7 +135,7 @@
 </head>
 <body> 
 	<header>
-    	<?php include_once "header.php";?>
+    	<?php include "header.php";?>
     </header>
 	<section>
 		<div id="main_img_bar">
@@ -106,17 +143,16 @@
         </div>
         <div id="main_content">
       		<div id="join_box">
-          	<form  name="member_form" method="post" action="member_insert.php">
+          	<form  name="member_form" id="member_form" method="post" action="member_insert.php">
 			    <h2>회원 가입</h2>
     		    	<div class="form id">
 				        <div class="col1">아이디</div>
 				        <div class="col2">
-							<input type="text" name="id" data-check="0" style="width: 100px">
+							<input type="text" name="id" id="id" style="width: 150px;">
+							&nbsp;
+							<span id="id_check_msg" data-check="0"></span>
 				        </div>  
-				        <div class="col3">
-				        	<a href="#"><img src="./img/check_id.gif" 
-				        		onclick="check_id()"></a>
-				        </div>                 
+               
 			       	</div>
 			       	<div class="clear"></div>
 
@@ -150,7 +186,7 @@
 			       	<div class="clear"></div>
 			       	<div class="bottom_line"> </div>
 			       	<div class="buttons">
-	                	<img style="cursor:pointer" src="./img/button_save.gif" onclick="check_input()">&nbsp;
+	                	<img style="cursor:pointer" id="save_frm" src="./img/button_save.gif" >&nbsp;
                   		<img id="reset_button" style="cursor:pointer" src="./img/button_reset.gif"
                   			onclick="reset_form()">
 	           		</div>

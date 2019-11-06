@@ -1,3 +1,6 @@
+<?php 
+	include_once './db/db_con.php';
+?>
 <!DOCTYPE html>
 <html>
 <head> 
@@ -21,12 +24,24 @@
 <?php
 	$num  = $_GET["num"];
 	$page  = $_GET["page"];
+	
+	if(!$num){
+		//뒷페이지로 넘어가는 로직
+		echo("
+                    <script>
+                    alert('정상적 경로로 접근하세요.');
+                    history.go(-1)
+                    </script>
+        ");
+		exit;		
+	}
 
-	$con = mysqli_connect("localhost", "user1", "1234", "sample");
-	$sql = "select * from board where num=$num";
+	//$con = mysqli_connect("localhost", "user1", "1234", "sample");
+	$sql = "select * from board where num='$num'";
 	$result = mysqli_query($con, $sql);
 
 	$row = mysqli_fetch_array($result);
+	
 	$id      = $row["id"];
 	$name      = $row["name"];
 	$regist_day = $row["regist_day"];
@@ -41,7 +56,7 @@
 	$content = str_replace("\n", "<br>", $content);
 
 	$new_hit = $hit + 1;
-	$sql = "update board set hit=$new_hit where num=$num";   
+	$sql = "update board set hit='$new_hit' where num='$num'";   
 	mysqli_query($con, $sql);
 ?>		
 	    <ul id="view_content">
@@ -57,7 +72,7 @@
 						$file_size = filesize($file_path);
 
 						echo "▷ 첨부파일 : $file_name ($file_size Byte) &nbsp;&nbsp;&nbsp;&nbsp;
-			       		<a href='download.php?num=$num&real_name=$real_name&file_name=$file_name&file_type=$file_type'>[저장]</a><br><br>";
+			       		<a href='board_download.php?num=$num&real_name=$real_name&file_name=$file_name&file_type=$file_type'>[저장]</a><br><br>";
 			           	}
 				?>
 				<?=$content?>

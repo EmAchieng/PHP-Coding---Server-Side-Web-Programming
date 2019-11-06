@@ -1,10 +1,14 @@
+<?php 
+	include_once './config.php';
+?>
 <!DOCTYPE html>
 <html>
 <head> 
 <meta charset="utf-8">
 <title>PHP 프로그래밍 입문</title>
-<link rel="stylesheet" type="text/css" href="./css/common.css">
-<link rel="stylesheet" type="text/css" href="./css/message.css">
+<link rel="stylesheet" type="text/css" href="./css/common.css?var=<?=$sys['var']?>">
+<link rel="stylesheet" type="text/css" href="./css/message.css?var=<?=$sys['var']?>">
+<script src="./js/jquery-1.10.2.js?var=<?=$sys['var']?>"></script>
 <script>
   function check_input() {
   	  if (!document.message_form.rv_id.value)
@@ -25,17 +29,17 @@
           document.message_form.content.focus();
           return;
       }
-      document.message_form.submit();
+      $("#message_form").submit();
+      //document.message_form.submit();
    }
 </script>
 </head>
 <body> 
 <header>
-    <?php include "header.php";?>
+    <?php include_once "header.php";?>
 </header>  
 <?php
-	if (!$userid )
-	{
+	if (!$userid){ // $userid는 config.php의 세션에서 받아옴
 		echo("<script>
 				alert('로그인 후 이용해주세요!');
 				history.go(-1);
@@ -56,7 +60,7 @@
 				<li><span><a href="message_box.php?mode=rv">수신 쪽지함 </a></span></li>
 				<li><span><a href="message_box.php?mode=send">송신 쪽지함</a></span></li>
 		</ul>
-	    <form  name="message_form" method="post" action="message_insert.php?send_id=<?=$userid?>">
+	    <form  name="message_form" id="message_form" method="post" action="message_insert.php?send_id=<?=$userid?>">
 	    	<div id="write_msg">
 	    	    <ul>
 				<li>

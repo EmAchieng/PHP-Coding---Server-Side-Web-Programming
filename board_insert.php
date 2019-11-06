@@ -1,24 +1,27 @@
 <meta charset="utf-8">
 <?php
-	include_once './db/db_con.php';
+	include_once "./db/db_con.php";
 	include_once './config.php';
-/*
-    session_start();
+    /* 
+	session_start();
     if (isset($_SESSION["userid"])) $userid = $_SESSION["userid"];
     else $userid = "";
     if (isset($_SESSION["username"])) $username = $_SESSION["username"];
     else $username = "";
-*/
-    if ( !$userid )
-    {
+
+    $con = mysqli_connect("localhost", "user1", "1234", "sample");
+ 	*/    
+    
+    if ( !$userid ){
         echo("
                     <script>
                     alert('게시판 글쓰기는 로그인 후 이용해 주세요!');
                     history.go(-1)
                     </script>
-        ");
-                exit;
+        ");                
+        exit;
     }
+    
 
     $subject = $_POST["subject"];
     $content = $_POST["content"];
@@ -30,41 +33,40 @@
 
 	$upload_dir = './data/';
 
+	
 	$upfile_name	 = $_FILES["upfile"]["name"][0];
 	$upfile_tmp_name = $_FILES["upfile"]["tmp_name"][0];
 	$upfile_type     = $_FILES["upfile"]["type"][0];
 	$upfile_size     = $_FILES["upfile"]["size"][0];
 	$upfile_error    = $_FILES["upfile"]["error"][0];
 	
-	/*echo $upfile_tmp_name();
-	
-	exit;
-     */
-	
-	if ($upfile_name && !$upfile_error)
-	{
-		$file = explode(".", $upfile_name);
-		
-		for($ii=0; $ii < count($file); $ii++) {
-			if([$ii] == count ($file) - 1) {
+	//echo "$upfile_tmp_name $upfile_type $upfile_size $upfile_name";
+
+	if ($upfile_name && !$upfile_error){
+		$file = explode(".", $upfile_name);		
+		for($ii=0; $ii < count($file); $ii++){
+			if($ii == count($file)-1){
 				$file_ext = $file[$ii];
-			}
-			else {
-				if([$ii] == count($file) - 2)
+
+				if($ii == count($file)-2)
 					$file_name = $file[$ii];
 				else
 					$file_name = $file[$ii].".";
 			}
 		}
+ 
+		/* 
 		$file_name = $file[0];
 		$file_ext  = $file[1];
-
+		$upfile_name = str_replace(".{$file_ext}", "", $upfile_name);
+		 */		
+		
 		$new_file_name = date("Y_m_d_H_i_s");
 		$new_file_name = $new_file_name;
-		$copied_file_name = $new_file_name.".".$file_ext;      
-		$uploaded_file = $upload_dir.$copied_file_name;
+		$copied_file_name = $new_file_name.".".$file_ext; // 서버에 올라가는 새로운 파일명    
+		$uploaded_file = $upload_dir.$copied_file_name; // 서버에 올라가는 경로를 포함한 새로운 파일명
 
-		if( $upfile_size  > 10000000000 ) {
+		if( $upfile_size  > 10000000000000 ) {
 				echo("
 				<script>
 				alert('업로드 파일 크기가 지정된 용량(1MB)을 초과합니다!<br>파일 크기를 체크해주세요! ');
@@ -73,8 +75,8 @@
 				");
 				exit;
 		}
-
-		if (!move_uploaded_file($upfile_tmp_name, $uploaded_file) )
+ 
+		if (!move_uploaded_file($upfile_tmp_name, $uploaded_file) ) // ./data/2019_11_01_14_20_32.jpg
 		{
 				echo("
 					<script>
@@ -85,15 +87,12 @@
 				exit;
 		}
 	}
-	else 
-	{
+	else {
 		$upfile_name      = "";
 		$upfile_type      = "";
 		$copied_file_name = "";
 	}
 	
-	$con = mysqli_connect("localhost", "user1", "12345", "sample");
-
 	$sql = "insert into board (id, name, subject, content, regist_day, hit,  file_name, file_type, file_copied) ";
 	$sql .= "values('$userid', '$username', '$subject', '$content', '$regist_day', 0, ";
 	$sql .= "'$upfile_name', '$upfile_type', '$copied_file_name')";

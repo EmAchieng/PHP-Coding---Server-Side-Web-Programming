@@ -38,7 +38,7 @@
 <?php
 	$num  = $_GET["num"];
 
-	$con = mysqli_connect("localhost", "user1", "12345", "sample");
+	$con = mysqli_connect("localhost", "user1", "1234", "sample");
 	$sql = "select * from message where num=$num";
 	$result = mysqli_query($con, $sql);
 
@@ -50,7 +50,7 @@
 
 	$subject = "RE: ".$subject; 
 
-	$content = "> ".$content; 
+	$content = ">".$content; 
 	$content = str_replace("\n", "\n>", $content);
 	$content = "\n\n\n-----------------------------------------------\n".$content;
 

@@ -56,7 +56,6 @@
 			        <span class="col2">
 			        	<input type="file" name="upfile[]">
 			        	<input type="file" name="upfile[]">
-			        	<input type="file" name="upfile[]">
 			        </span>
 			    </li>
 	    	    </ul>
